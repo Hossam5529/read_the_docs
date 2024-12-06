@@ -6,13 +6,13 @@
 Welcome to darija_data_preprocessing's documentation !
 ======================================================
 
-Darija Data Preprocessing is a part of the Darija Speech Recognition project, designed to collect, clean, and transform 
-raw speech data for model training. This repository handles the collection and preprocessing of data from YouTube, 
-improving alignment and preparing it for training the speech recognition model.
+Darija Data Preprocessing is a part of the Darija Speech Recognition project, designed to collect, clean, and transform   
+raw speech data for model training. This repository handles the collection and preprocessing of data from YouTube,   
+improving alignment and preparing it for training the speech recognition model.  
 
 Features
 ========
-1. Data Collecting And Transforming :
+1. Data Collecting And Transforming :  
 collect.py: Downloads audio files from YouTube, converts their sampling rate to 16 kHz,
 and splits them into chunks based on the transcription timestamps provided by the video. 
 Each chunk is associated with its corresponding transcription, and the downloaded chunks 
