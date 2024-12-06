@@ -44,6 +44,10 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Welcome to darija_data_preprocessing’s documentation !</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+<li><a class="reference internal" href="#contact">Contact</a></li>
 </ul>
 </div>
         </div>
@@ -72,9 +76,38 @@
              
   <section id="welcome-to-darija-data-preprocessing-s-documentation">
 <h1>Welcome to darija_data_preprocessing’s documentation !<a class="headerlink" href="#welcome-to-darija-data-preprocessing-s-documentation" title="Lien vers cette rubrique"></a></h1>
-<p>Add your content using <code class="docutils literal notranslate"><span class="pre">reStructuredText</span></code> syntax. See the
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html">reStructuredText</a>
-documentation for details.</p>
+<p>Darija Data Preprocessing is a part of the Darija Speech Recognition project, designed to collect, clean, and transform
+raw speech data for model training. This repository handles the collection and preprocessing of data from YouTube,
+improving alignment and preparing it for training the speech recognition model.</p>
+</section>
+<section id="features">
+<h1>Features<a class="headerlink" href="#features" title="Lien vers cette rubrique"></a></h1>
+<p>1. Data Collecting And Transforming :
+collect.py: Downloads audio files from YouTube, converts their sampling rate to 16 kHz,
+and splits them into chunks based on the transcription timestamps provided by the video.
+Each chunk is associated with its corresponding transcription, and the downloaded chunks
+are stored in a dataset folder within the same project repository.</p>
+<p>2. Data Cleaning :
+delete_extremities.py: Removes the extremities of each full audio to reduce misalignments.
+delete_long_audios.py: Deletes audio chunks longer than 6 seconds to facilitate model training.
+one_word_audios.py: Removes audio chunks containing only one word, as they are prone to misalignment.
+remove_0_sec_audios.py: Deletes audio chunks with 0 seconds duration, which are typically disaligned.
+remove_music_audios.py: Filters out audio chunks with background music, as it is considered noise for the model during training.</p>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Lien vers cette rubrique"></a></h1>
+<p>Clone the repository:
+git clone <a class="reference external" href="https://github.com/AnassBe34/darija_data_preprocessing.git">https://github.com/AnassBe34/darija_data_preprocessing.git</a></p>
+</section>
+<section id="authors">
+<h1>Authors<a class="headerlink" href="#authors" title="Lien vers cette rubrique"></a></h1>
+<p>This project is part of the Darija Speech Recognition initiative and is
+maintained by Anass Benamara and Hossam Tabsissi.</p>
+</section>
+<section id="contact">
+<h1>Contact<a class="headerlink" href="#contact" title="Lien vers cette rubrique"></a></h1>
+<p><a class="reference external" href="mailto:anassbenamara8&#37;&#52;&#48;gmail&#46;com">anassbenamara8<span>&#64;</span>gmail<span>&#46;</span>com</a>
+<a class="reference external" href="mailto:hossam&#46;tab84&#37;&#52;&#48;gmail&#46;com">hossam<span>&#46;</span>tab84<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
