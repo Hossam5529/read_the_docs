@@ -29,24 +29,24 @@ essentielle pour travailler avec des modèles comme Wav2Vec2.
 Detail :
 ~~~~~~~~~~~
 
-- Chargement des données :
+- 1.Chargement des données :
 
-    Le fichier train.txt contient les chemins des fichiers audio et leurs transcriptions associées.
-    Les données sont chargées dans un DataFrame Pandas en séparant les colonnes avec le délimiteur |.
+    - Le fichier train.txt contient les chemins des fichiers audio et leurs transcriptions associées.
+    - Les données sont chargées dans un DataFrame Pandas en séparant les colonnes avec le délimiteur |.
 
-- Renommage des colonnes :
+- 2.Renommage des colonnes :
 
-    Les colonnes path et transcript sont renommées respectivement en audio et text pour correspondre aux formats attendus.
+    - Les colonnes path et transcript sont renommées respectivement en audio et text pour correspondre aux formats attendus.
 
-- Conversion en Dataset Hugging Face :
+- 3.Conversion en Dataset Hugging Face :
 
-    La bibliothèque Hugging Face est utilisée pour convertir les données dans un format compatible avec les modèles.
-    La colonne audio est spécifiée comme contenant des fichiers audio en la "castant" au type Audio().
+    - La bibliothèque Hugging Face est utilisée pour convertir les données dans un format compatible avec les modèles.
+    - La colonne audio est spécifiée comme contenant des fichiers audio en la "castant" au type Audio().
 
-- Affichage des métadonnées :
+- 4.Affichage des métadonnées :
 
-    column_names : Affiche les colonnes (audio, text).
-    features : Montre les types de données (Audio pour les fichiers audio, String pour les transcriptions).
+    - column_names : Affiche les colonnes (audio, text).
+    - features : Montre les types de données (Audio pour les fichiers audio, String pour les transcriptions).
 
 - 4.2 Exemples de reconnaissance d'entités nommées
 ------------------------------------------------
