@@ -14,7 +14,8 @@ This project transcribes and translates Darija (Moroccan Arabic) audio into text
 The repository also includes essential tools for collecting data from YouTube videos, including audio and their corresponding transcriptions based on video timestamps. It offers scripts for cleaning, transforming, and organizing the data to make it suitable for training and fine-tuning the the Wav2Vec2-large-XLSR-53 model.
 
 A simple app is also provided that enables users to upload audio files and receive both transcriptions and translations in a straightforward interface.
-..
+
+ ..
 
 .. toctree::
    :maxdepth: 2
