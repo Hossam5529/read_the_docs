@@ -316,7 +316,7 @@ est d'assurer que le dataset soit exclusivement en arabe et exempt de données q
 ou l'entraînement des modèles linguistiques.
 
 .. code-block:: python
-    
+
         import os
     def contains_latine(str) :
         latine_special = [
@@ -351,4 +351,37 @@ ou l'entraînement des modèles linguistiques.
 
 3.3 Organization des données :
 --------------------------------
+
+Ce script est conçu pour générer un fichier texte structuré contenant les chemins des fichiers audio et leurs transcriptions 
+correspondantes pour un ensemble de segments audio. L’objectif est de créer un fichier d’index qui associe chaque fichier 
+audio à sa transcription, permettant une utilisation facile dans des tâches telles que l'entraînement 
+de modèles de reconnaissance vocale.
+
+.. code-block:: python
+
+    f = open('test.txt', 'w', encoding="utf-8")
+    for chunk_index in range(1500, 1900) :
+        audio_path = fr"C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_{chunk_index}.wav"
+        transcription_path = fr"C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_{chunk_index}.txt"
+        if os.path.exists(audio_path) :
+            audio = AudioSegment.from_file(audio_path)
+            duration = audio.duration_seconds
+            trans_file = open(transcription_path, 'r', encoding="utf-8")
+            transcription = trans_file.read()
+            trans_file.close()
+            f.write(f"{audio_path}|")
+            f.write(f"{transcription}\n")
+            #f.write(f"{duration}\n")      
+    f.close()
+
+Exemple d'exécution :
+
+.. code-block:: python
+    C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1500.wav|الله مرحبا بها ذاكشي اللي بغينا احنا
+    C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1501.wav|غاين كفاش بديتي ريسون كون كيفاش بديت
+    C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1503.wav|فيديوز كنضحك واح النهار عجبني راسي لابس
+    C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1504.wav|الفوقيه نهار الجمعه صورت فيديو بدا طالع
+    C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1506.wav|فشد النار كعس
+
+
 
