@@ -22,13 +22,15 @@ ce qui facilite l'analyse et le traitement ultérieur des extraits sonores et de
  
 3.1.2 Définir la liste des URL :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Dans le script, renseignez toutes les URL YouTube que vous souhaitez traiter dans la variable url_list. 
+Dans le script, renseignez toutes les URL YouTube que vous souhaitez traiter dans la variable url_list.
+
 .. code-block:: python
 
    url_list = [
-    'https://www.youtube.com/watch?v=N8VbED0CPXc',
+   'https://www.youtube.com/watch?v=N8VbED0CPXc',
    'https://www.youtube.com/watch?v=ikUHqsSZROQ',
-   'https://www.youtube.com/watch?v=sEehKE0dhps',]
+   'https://www.youtube.com/watch?v=sEehKE0dhps',
+   ]
 
 3.1.3 Exécuter le téléchargement et la conversion : 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,10 +64,9 @@ Pour chaque URL de la liste :
    def convert_to_wav(folder_name, audio_name):
       input_file = f"{folder_name}/{audio_name}.mp3"
       output_file = f"{folder_name}/{audio_name}.wav"
-      
-      
       audio = AudioSegment.from_mp3(input_file)
       audio.export(output_file, format="wav")
+      
       if os.path.exists(output_file):
          os.remove(input_file)
          print(f"Conversion complete! '{input_file}' has been replaced by '{output_file}'.")
@@ -75,6 +76,7 @@ Pour chaque URL de la liste :
 3.1.4 Récupérer les sous-titres : 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 À l'aide de la fonction get_transcriptions(), récupérez les transcriptions de la vidéo (ici, spécifiées en arabe).
+
 .. code-block:: python
 
  def get_transcriptions(video_id) :
