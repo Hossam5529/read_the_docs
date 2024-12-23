@@ -377,6 +377,7 @@ de modèles de reconnaissance vocale.
 Exemple d'exécution :
 
 .. code-block:: python
+    
     C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1500.wav|الله مرحبا بها ذاكشي اللي بغينا احنا
     C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1501.wav|غاين كفاش بديتي ريسون كون كيفاش بديت
     C:\Users\ASUS\Desktop\dataset\dataset_0\audio_chunk_1503.wav|فيديوز كنضحك واح النهار عجبني راسي لابس
