@@ -1,30 +1,54 @@
-Fine-tuning
+IV-Fine-tuning
 =============
 
-1.Qu'est-ce que la reconnaissance d'entité ?
+4.1 Chargement et Préparation des Données :
 ---------------------------------------------
+Cette étape prépare les données d'entraînement pour les rendre compatibles avec la bibliothèque Hugging Face Datasets, 
+essentielle pour travailler avec des modèles comme Wav2Vec2.
 
-La reconnaissance d'entité **(Name entity recognition)** fait partie du traitement du langage naturel. L'objectif premier de NER est de traiter données structurées et non structurées et classer ces entités dans des catégories prédéfinies. Certaines catégories courantes incluent le nom, le lieu, l'entreprise, l'heure, les valeurs monétaires, les événements, etc.
+.. code-block:: python
+   
+   import pandas as pd
+   from datasets import Dataset, Audio
 
-En quelques mots, NER s'occupe de :
+   file_path = r"C:\Users\ASUS\Desktop\DARIJA_SPEECH_RECOGNITION\Data Preprocessing\data_organization\train.txt" 
 
-  - Reconnaissance/détection d'entités  
-  - Identification d'un mot ou d'une série de mots dans un document.
-  - Classification des entités 
-  - Classement de chaque entité détectée dans des catégories prédéfinies.
+   train_data = pd.read_csv(file_path, sep="|", header=0)
 
-Mais comment le NER est-il lié à la NLP ?
+   train_data.rename(columns={'path': 'audio', 'transcript': 'text'}, inplace=True)
 
-Le traitement du langage naturel aide à développer des machines intelligentes capables d'extraire le sens de la parole et du texte. L'apprentissage automatique aide ces systèmes intelligents à continuer à apprendre en s'entraînant sur de grandes quantités de langage naturel ensembles de données.
+   train_data = train_data.iloc[:, :2]
 
-Généralement, la NLP se compose de trois grandes catégories :
+   train_data_hf = Dataset.from_pandas(train_data)
 
-  - Comprendre la structure et les règles de la langue,Syntaxe.
-  - Déduire le sens des mots, du texte et de la parole et identifier leurs relations sémantiques.
-  
-NER aide dans la partie sémantique de la NLP, extrayant le sens des mots, les identifiant et les localisant en fonction de leurs relations.
+   train_data_hf = train_data_hf.cast_column("audio", Audio())
 
-2.Exemples de reconnaissance d'entités nommées
+   print(train_data_hf.column_names)  
+   print(train_data_hf.features)     
+
+Detail :
+~~~~~~~~~~~
+
+- Chargement des données :
+
+    Le fichier train.txt contient les chemins des fichiers audio et leurs transcriptions associées.
+    Les données sont chargées dans un DataFrame Pandas en séparant les colonnes avec le délimiteur |.
+
+- Renommage des colonnes :
+
+    Les colonnes path et transcript sont renommées respectivement en audio et text pour correspondre aux formats attendus.
+
+- Conversion en Dataset Hugging Face :
+
+    La bibliothèque Hugging Face est utilisée pour convertir les données dans un format compatible avec les modèles.
+    La colonne audio est spécifiée comme contenant des fichiers audio en la "castant" au type Audio().
+
+- Affichage des métadonnées :
+
+    column_names : Affiche les colonnes (audio, text).
+    features : Montre les types de données (Audio pour les fichiers audio, String pour les transcriptions).
+
+- 4.2 Exemples de reconnaissance d'entités nommées
 ------------------------------------------------
 
 .. figure:: /Documentation/Images/NER.png
