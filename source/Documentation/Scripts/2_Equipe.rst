@@ -20,9 +20,9 @@ Les membres :
 .. |linkedin_Anass| image:: ../Images/LinkedIn_Logo.jpeg
     :width: 16
     :height: 16
-    :target: https://www.linkedin.com/in/anass-benamara-274aa6206/
+    :target: https://www.linkedin.com/in/anass-benamara-751b59258/
 
 .. |linkedin_Hossam| image:: ../Images/LinkedIn_Logo.jpeg
     :width: 16
     :height: 16
-    :target: https://www.linkedin.com/in/hossam-tabsissi-42ba3a247/
+    :target: https://www.linkedin.com/in/hossam-tabsissi-8318b1263/
