@@ -1,7 +1,7 @@
 Equipe
 ======================================
 
-L'équipe se compose de 2 individus. Ils ont opéré sous l'encadrement de Mr Tawfik Masrour et Badreddine Hannaoui.
+L'équipe se compose de 2 individus. Ils ont opéré sous l'encadrement de Mr Tawfik Masrour.
 
 Les encadrants : 
 ----------------

@@ -66,7 +66,7 @@ Pour chaque URL de la liste :
       output_file = f"{folder_name}/{audio_name}.wav"
       audio = AudioSegment.from_mp3(input_file)
       audio.export(output_file, format="wav")
-      
+
       if os.path.exists(output_file):
          os.remove(input_file)
          print(f"Conversion complete! '{input_file}' has been replaced by '{output_file}'.")
@@ -122,6 +122,7 @@ Pour chaque URL de la liste :
 - Créez un fichier texte associé pour y stocker la transcription de ce segment.
 - Lorsque le script atteint 20 000 segments, il crée automatiquement un nouveau dossier (p. ex. dataset_2) pour stocker les parties suivantes.
 - Enfin, à chaque fin de traitement, supprimez le fichier WAV de l’audio complet, maintenant que vous en avez extrait tous les segments utiles.
+
 .. code-block:: python
 
    def process_videos(url_list):
@@ -174,3 +175,173 @@ Pour chaque URL de la liste :
             
         os.remove(fr'dataset\audio_{i}.wav')
 
+
+3.2 Nettoyage des données :
+------------------------------
+3.2.1 Suppression des extrémités:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ce script est conçu pour supprimer les fichiers audio et texte situés aux extrémités d'un ensemble de segments, en suivant une logique spécifique. L'objectif est de nettoyer le dataset en supprimant les 50 fichiers précédents à un fichier audio particulier détecté, tout en s'assurant que seuls les fichiers pertinents sont conservés.
+
+.. code-block:: python
+
+    import os 
+    dataset_index = 0
+    nbr=0
+    for chunk_index in range(2600, 54111) :
+        audio = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}_video_end.wav"
+        if os.path.exists(audio) :
+            for i in range(chunk_index, chunk_index - 50, -1 ) :
+                if os.path.exists(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{i}.wav") :
+                    os.remove(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{i}.wav")
+                    os.remove(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{i}.txt")
+                    nbr +=1
+                    print(i)
+        if chunk_index%20000 == 0 and chunk_index !=0 :
+            dataset_index+=1
+    print(f'number of videos that was removed are : {nbr}')
+
+3.2.2 Suppression des longs audios:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ce script supprime automatiquement les fichiers audio dont la durée dépasse 6 secondes, ainsi que leurs fichiers texte associés, à partir d'un dataset organisé en sous-dossiers.
+
+.. code-block:: python
+    nbr = 0
+    dataset_index = 0
+    for chunk_index in range(54111) : ## CHANGE IT TO YOUR MAX CHUNK_INDEX
+        try :
+            chunk = AudioSegment.from_file(rf'dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav')
+        except :
+            pass
+        if chunk.duration_seconds > 6 :
+            if os.path.exists(fr'dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav') :
+                os.remove(fr'dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav')
+                os.remove(fr'dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.txt')
+                print(F"CHUNK AUDIO {chunk_index} REMOVED")
+            nbr +=1
+        if chunk_index % 20000 == 0 and chunk_index!=0:
+            dataset_index+=1
+    print(f"The numbers of audios bigger than 6 seconds are : {nbr}")
+
+
+3.2.3 Suppression des audios dont leurs transcriptions comportent un mot:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ce script a pour objectif de supprimer les fichiers audio ainsi que leurs fichiers de transcription associés lorsque la transcription ne contient qu’un seul mot (aucun espace dans le texte). Cela permet de nettoyer le dataset en éliminant les segments audio jugés trop courts ou peu pertinents pour des analyses ou traitements ultérieurs.
+
+.. code-block:: python
+
+    def remove_one_word_audios() :
+    dataset_index = 0
+    nbr = 0
+    for chunk_index in range(54111) : ##DONT FORGET TO CHANGE TO YOUR TOTAL CHUNKS
+        
+        transcription = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.txt"
+        audio = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav"
+        if os.path.exists(transcription) :
+            f = open(transcription, "r", encoding="utf-8")
+            content = f.read()
+            ## REMOVE AUDIOS THAT HAS ONLY ONE SPACE -> ONE WORD
+            if content.count(' ') == 0 :
+                print(chunk_index)
+                nbr+=1
+                f.close()
+                os.remove(transcription)
+                os.remove(audio)
+        if chunk_index % 20000 == 0 and chunk_index!=0 :
+            dataset_index+=1
+    print(f'the number of one word audio are : {nbr}')
+ remove_one_word_audios()
+
+3.2.4 Supression des audios de moins de 1 seconde :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce script vise à supprimer les fichiers audio dont la durée est inférieure à 1 seconde, ainsi que leurs 
+fichiers de transcription associés. Cela permet de nettoyer le dataset en éliminant les segments audio très courts, 
+souvent inutilisablespour des applications comme l'entraînement de modèles de reconnaissance vocale ou l'analyse audio.
+
+.. code-block:: python
+
+    nbr = 0
+    dataset_index = 0
+    for chunk_index in range(54111) :
+        try :
+            chunk = AudioSegment.from_file(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav")
+        except :
+            pass
+        if chunk.duration_seconds < 1 :
+            if os.path.exists(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav") :
+                os.remove(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav")
+                os.remove(fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.txt")
+                print(f"CHUNK AUDIO {chunk_index} FOUND")
+                nbr +=1
+        if chunk_index % 20000 == 0 and chunk_index!=0:
+            dataset_index+=1
+    print(f"The numbers of 0s audios are : {nbr}")
+
+3.2.5 Supression des audios comportant de la musique :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce script est conçu pour supprimer les fichiers audio et leurs transcriptions associés lorsque la transcription contient 
+au moins un caractère [ (généralement utilisé pour indiquer des annotations comme des sons ou de la musique).
+L'objectif est de nettoyer le dataset en éliminant les segments correspondant à de la musique, des effets sonores ou 
+d'autres annotations non vocales, qui ne sont pas utiles pour des applications de traitement de la parole.
+
+.. code-block:: python
+    def remove_one_word_audios() :
+    dataset_index = 0
+    nbr = 0
+    for chunk_index in range(54111) : ##DONT FORGET TO CHANGE TO YOUR TOTAL CHUNKS
+        transcription = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.txt" ##REPLACE WITH YOUR DATA PATH
+        audio = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav"##REPLACE WITH YOUR DATA PATH
+        if os.path.exists(transcription) :
+            f = open(transcription, "r", encoding="utf-8")
+            content = f.read()
+            if content.count('[') >=1 :
+                print(chunk_index)
+                nbr+=1
+                f.close()
+                os.remove(transcription)
+                os.remove(audio)
+        if chunk_index % 20000 == 0 and chunk_index!=0 :
+            dataset_index+=1           
+    print(f'the number of music audios deleted are : {nbr}')
+    remove_one_word_audios()
+
+3.2.6 Suppression des audios et de leurs transcriptions contenant des caractères non conformes à la langue arabe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce script a pour but de supprimer les fichiers audio et leurs transcriptions associés lorsque la transcription 
+contient des caractères latins ou des symboles spéciaux qui ne sont pas typiques de la langue arabe. L'objectif 
+est d'assurer que le dataset soit exclusivement en arabe et exempt de données qui pourraient perturber les analyses 
+ou l'entraînement des modèles linguistiques.
+
+.. code-block:: python
+        import os
+    def contains_latine(str) :
+        latine_special = [
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        '?', '.', '!', '\\', '-', ';', ':', '"', '“', '%', "'", '�','0',
+        '1','2','3','4','5','6','7','8','9',
+    ]
+        for letter in latine_special :
+            if letter in str :
+                return True
+        return False
+
+    nbr = 0
+    dataset_index = 0
+    for chunk_index in range(54111) : ##REPLACE WITH YOUR MAX CHUNK_INDEX
+        transc_path = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.txt" ##REPLACE WITH YOUR DATA PATH
+        audio_path = fr"C:\Users\ASUS\Desktop\dataset\dataset_{dataset_index}\audio_chunk_{chunk_index}.wav" ##REPLACE WITH YOUR DATA PATH
+        if os.path.exists(transc_path) :
+            transc_file = open(transc_path, 'r', encoding='utf-8')
+            transc = transc_file.read()
+            transc_file.close()
+            if contains_latine(transc) :
+                os.remove(transc_path)
+                os.remove(audio_path)
+                print(f"Chunk {chunk_index} removed !")
+                nbr+=1
+        if chunk_index % 20000 == 0 and chunk_index!=0 :
+                dataset_index+=1
+    print(f'The number of latin or special removed audios are {nbr}')
