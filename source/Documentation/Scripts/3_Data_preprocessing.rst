@@ -1,4 +1,4 @@
-Prétraitement des données : 
+Prétraitement des données 
 =========================
 
 3.1 Collection des données :

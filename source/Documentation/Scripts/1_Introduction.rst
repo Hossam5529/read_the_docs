@@ -1,4 +1,4 @@
-Introduction :
+Introduction 
 ================
 
 La reconnaissance automatique de la parole (ASR) et la traduction automatique jouent un rôle clé dans la communication 
