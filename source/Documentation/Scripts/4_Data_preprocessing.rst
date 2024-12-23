@@ -2,7 +2,7 @@ Prétraitement des données :
 =========================
 
 3.1 Collection des données :
--------------------------------------------
+----------------------------------
 Ce script permet de télécharger des vidéos YouTube au format audio (MP3), de les convertir en WAV, 
 puis de découper ces fichiers en segments à partir des transcriptions générées pour chaque vidéo.
 Concrètement, le code utilise yt-dlp pour extraire le flux audio, pydub pour la conversion et la découpe,
@@ -286,6 +286,7 @@ L'objectif est de nettoyer le dataset en éliminant les segments correspondant �
 d'autres annotations non vocales, qui ne sont pas utiles pour des applications de traitement de la parole.
 
 .. code-block:: python
+
     def remove_one_word_audios() :
     dataset_index = 0
     nbr = 0
@@ -315,6 +316,7 @@ est d'assurer que le dataset soit exclusivement en arabe et exempt de données q
 ou l'entraînement des modèles linguistiques.
 
 .. code-block:: python
+    
         import os
     def contains_latine(str) :
         latine_special = [
@@ -345,3 +347,8 @@ ou l'entraînement des modèles linguistiques.
         if chunk_index % 20000 == 0 and chunk_index!=0 :
                 dataset_index+=1
     print(f'The number of latin or special removed audios are {nbr}')
+
+
+3.3 Organization des données :
+--------------------------------
+
