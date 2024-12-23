@@ -1,4 +1,4 @@
-NER modèles
+Fine-tuning
 =============
 
 1.Qu'est-ce que la reconnaissance d'entité ?
