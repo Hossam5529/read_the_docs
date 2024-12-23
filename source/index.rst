@@ -26,8 +26,5 @@ A simple app is also provided that enables users to upload audio files and recei
    Documentation/Scripts/3_Data_preprocessing.rst
    Documentation/Scripts/4_Finetuning.rst
    Documentation/Scripts/6_Labellisation.rst
-   Documentation/Scripts/7_Training.rst
-   Documentation/Scripts/8_Inference.rst
-   Documentation/Scripts/9_LLM_Models.rst
-   Documentation/Scripts/10_perspectives.rst
+   Documentation/Scripts/7_perspectives.rst
    
