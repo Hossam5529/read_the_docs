@@ -26,6 +26,11 @@ essentielle pour travailler avec des modèles comme Wav2Vec2.
    print(train_data_hf.column_names)  
    print(train_data_hf.features)     
 
+.. code-block:: python
+
+   ['audio', 'text']
+   {'audio': Audio(sampling_rate=None, mono=True, decode=True, id=None), 'text': Value(dtype='string', id=None)}
+   
 Detail :
 ~~~~~~~~~~~
 
@@ -47,6 +52,7 @@ Detail :
 
     - column_names : Affiche les colonnes (audio, text).
     - features : Montre les types de données (Audio pour les fichiers audio, String pour les transcriptions).
+
 
 - 4.2 Exemples de reconnaissance d'entités nommées
 ------------------------------------------------
