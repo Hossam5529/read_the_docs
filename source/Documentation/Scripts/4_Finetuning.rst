@@ -427,8 +427,77 @@ une mesure standard pour évaluer les systèmes de reconnaissance vocale.
          :align: center
          :alt: Alternative text for the image
          :name: image
-         
+
 
     - Retour des résultats :
         - La fonction retourne un dictionnaire contenant la métrique WER : {"wer": wer}.
+
+4.8 Chargement et Configuration du Modèle Wav2Vec2 :
+-------------------------------------------------------
+
+Dans cette étape, le modèle Wav2Vec2ForCTC est initialisé à partir d'un modèle pré-entraîné de Hugging Face et personnalisé 
+pour l'adaptation aux données spécifiques.
+
+.. code-block:: python
+
+   from transformers import Wav2Vec2ForCTC
+
+   model = Wav2Vec2ForCTC.from_pretrained(
+      "facebook/wav2vec2-large-xlsr-53",  # Modèle pré-entraîné Wav2Vec2
+      attention_dropout=0.1,             # Dropout dans les mécanismes d'attention
+      hidden_dropout=0.1,                # Dropout dans les couches cachées
+      feat_proj_dropout=0.0,             # Pas de dropout sur la projection des caractéristiques
+      mask_time_prob=0.05,               # Probabilité de masquage temporel pour l'entraînement
+      layerdrop=0.1,                     # Dropout entre les couches
+      ctc_loss_reduction="mean",         # Moyenne pour le calcul de la perte CTC
+      pad_token_id=processor.tokenizer.pad_token_id,  # ID du token de padding
+      vocab_size=len(processor.tokenizer)            # Taille du vocabulaire
+  )
+
+4.9 Configuration des Arguments d'Entraînement :
+--------------------------------------------------
+Dans cette étape, vous configurez les paramètres d'entraînement pour le modèle Wav2Vec2ForCTC en utilisant la classe TrainingArguments de Hugging Face. Ces arguments déterminent les hyperparamètres et les réglages 
+nécessaires pour l'entraînement et l'évaluation.
+
+.. code-block:: python
+
+   from transformers import TrainingArguments
+   training_args = TrainingArguments(
+      output_dir=r"C:\Users\ASUS\Desktop\finetuning",  # Dossier pour sauvegarder les checkpoints et logs
+      group_by_length=True,                           # Grouper les séquences de longueurs similaires dans un lot
+      per_device_train_batch_size=32,                 # Taille du batch pour chaque appareil (GPU/CPU)
+      gradient_accumulation_steps=4,                  # Accumuler les gradients sur 4 batches avant une mise à jour
+      evaluation_strategy="steps",                    # Évaluer le modèle après un certain nombre de pas
+      num_train_epochs=30,                            # Nombre total d'époques d'entraînement
+      fp16=True,                                      # Utiliser la précision mixte (FP16) pour accélérer l'entraînement
+      save_steps=100,                                 # Sauvegarder les checkpoints tous les 100 pas
+      eval_steps=100,                                 # Évaluer le modèle tous les 100 pas
+      logging_steps=10,                               # Journaliser les métriques toutes les 10 étapes
+      learning_rate=3e-4,                             # Taux d'apprentissage
+      warmup_steps=500,                               # Étapes de réchauffement pour le scheduler de LR
+      save_total_limit=2,                             # Limiter le nombre de checkpoints sauvegardés à 2
+   )
+
+4.9.1 Création du Trainer pour l'Entraînement
+----------------------------------------------
+La classe Trainer de Hugging Face est utilisée pour orchestrer l'ensemble du processus d'entraînement, d'évaluation et de gestion des données. Elle combine le modèle, les données, les métriques, et les arguments d'entraînement pour offrir 
+un pipeline d'entraînement clé en main.
+
+.. code-block:: python 
+
+   from transformers import Trainer
+   trainer = Trainer(
+      model=model,                          # Modèle Wav2Vec2 pour la tâche CTC
+      data_collator=data_collator,          # Collateur de données pour gérer le padding et les lots
+      args=training_args,                   # Arguments d'entraînement configurés précédemment
+      compute_metrics=compute_metrics,      # Fonction pour calculer les métriques (ex. : WER)
+      train_dataset=train_data_hf,          # Dataset d'entraînement
+      eval_dataset=test_data_hf,            # Dataset de test/évaluation
+      tokenizer=processor.feature_extractor # Tokenizer pour traiter les données audio
+   )
+
+
+
+
+
 
