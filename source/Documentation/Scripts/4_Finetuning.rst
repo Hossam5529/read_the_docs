@@ -422,11 +422,11 @@ une mesure standard pour évaluer les systèmes de reconnaissance vocale.
     - Calcul du Word Error Rate (WER) :
         - La fonction wer_metric.compute compare les transcriptions prédictes avec les transcriptions de référence pour calculer le taux d'erreurs :
         
-.. figure:: /Documentation/Images/wer.PNG
+.. figure:: /Documentation/Images/classes.jpg
    :width: 70%
    :align: center
    :alt: Alternative text for the image
-   :name: Serveur d'images*
+   :name: Prétraitement
 
 - Retour des résultats :
    - La fonction retourne un dictionnaire contenant la métrique WER : {"wer": wer}.
