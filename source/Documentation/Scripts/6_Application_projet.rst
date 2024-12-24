@@ -1,4 +1,4 @@
-VI-Application du projet :
+VI-Application du projet 
 ===========================
 
 Ce code utilise Streamlit pour créer une interface utilisateur simple permettant de transcrire et de traduire un 

@@ -1,3 +1,3 @@
-V-Modèle traduction :
+V-Modèle traduction 
 =======================
 
