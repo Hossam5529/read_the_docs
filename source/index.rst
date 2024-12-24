@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to darija_data_preprocessing's documentation !
-======================================================
+Welcome to darija voice transcription's and translation's documentation !
+===========================================================================
 
 This project transcribes and translates Darija (Moroccan Arabic) audio into text with two main components:
 
