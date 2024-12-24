@@ -2,7 +2,7 @@ IV-Fine-tuning
 =============
 
 4.1 Chargement et Préparation des Données de l'entrainement :
----------------------------------------------------------------------------
+------------------------------------------------------------------
 Cette étape prépare les données d'entraînement pour les rendre compatibles avec la bibliothèque Hugging Face Datasets, 
 essentielle pour travailler avec des modèles comme Wav2Vec2.
 
@@ -54,8 +54,8 @@ Détail :
     - features : Montre les types de données (Audio pour les fichiers audio, String pour les transcriptions).
 
 
-4.2 Chargement et Préparation des Données de Test
-----------------------------------------------------------
+4.2 Chargement et Préparation des Données de Test :
+-----------------------------------------------------
 Cette étape prépare les données de test de la même manière que les données d'entraînement, 
 afin qu'elles soient compatibles avec le modèle et le pipeline d'évaluation.
 
@@ -102,7 +102,7 @@ Détail :
 
     - La commande print(test_data.head()) permet de visualiser les premières lignes du DataFrame pour vérifier que les données ont été correctement chargées et formatées.
 
-4.3 Extraction du Vocabulaire Unique
+4.3 Extraction du Vocabulaire Unique :
 --------------------------------------
 
 Dans cette étape, vous extrayez les caractères uniques présents dans les transcriptions des données d'entraînement et de test. 
@@ -193,7 +193,7 @@ Détail :
 Dans cette étape, le vocabulaire extrait est sauvegardé dans un fichier JSON. Ensuite, 
 un tokenizer et un processeur sont configurés pour préparer les données d'entrée au modèle Wav2Vec2.
 
-4.4.1 Sauvegarde du vocabulaire en JSON
+4.4.1 Sauvegarde du vocabulaire en JSON :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -207,7 +207,7 @@ un tokenizer et un processeur sont configurés pour préparer les données d'ent
     - ensure_ascii=False : Permet de sauvegarder correctement les caractères non latins (par exemple, en arabe).
     - indent=4 : Ajoute une indentation pour rendre le fichier JSON lisible.
 
-4.4.2 Création du tokenizer
+4.4.2 Création du tokenizer :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -227,7 +227,7 @@ un tokenizer et un processeur sont configurés pour préparer les données d'ent
      - pad_token="[PAD]" : Définit le jeton pour le padding.
      - word_delimiter_token="|" : Séparateur pour délimiter les mots.
 
-4.4.3 Création du feature extractor
+4.4.3 Création du feature extractor :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -301,7 +301,7 @@ numériques et des transcriptions en séquences d'indices.
 
     - Les transcriptions sont converties en indices numériques (input_ids) à l'aide du tokenizer du processeur.
 
-4.6  Création d'un Data Collator pour le Fine-Tuning
+4.6  Création d'un Data Collator pour le Fine-Tuning :
 ------------------------------------------------------
 
 Le data collator est une classe qui gère le processus de mise en lot (batching) des données tout en appliquant un 
@@ -377,5 +377,57 @@ padding dynamique aux entrées et aux étiquettes. Cette étape est essentielle 
     - **Retour :**
         - Un dictionnaire contenant les données d'entrée (input_values) et les étiquettes (labels) après padding.
 
-4.7  Création d'un Data Collator pour le Fine-Tuning
-------------------------------------------------------
+4.7 Calcul des Métriques de Performance :
+-------------------------------------------
+Cette étape définit une fonction pour évaluer les performances du modèle de transcription. La métrique principale utilisée ici est le Word Error Rate (WER), 
+une mesure standard pour évaluer les systèmes de reconnaissance vocale.
+
+.. code-block:: python
+
+   def compute_metrics(pred):
+      # Obtenir les logits des prédictions
+      pred_logits = pred.predictions
+
+      # Convertir les logits en indices de prédiction
+      pred_ids = np.argmax(pred_logits, axis=-1)
+
+      # Remplacer les labels -100 par l'ID du token [PAD] (padding)
+      pred.label_ids[pred.label_ids == -100] = processor.tokenizer.pad_token_id
+
+      # Décoder les prédictions en texte
+      pred_str = processor.batch_decode(pred_ids)
+
+      # Décoder les labels (sans regrouper les tokens)
+      label_str = processor.batch_decode(pred.label_ids, group_tokens=False)
+
+      # Calculer le Word Error Rate
+      wer = wer_metric.compute(predictions=pred_str, references=label_str)
+
+      return {"wer": wer}
+
+- Détails de la Fonction compute_metrics
+
+    - Logits des prédictions :
+        - Les sorties du modèle (pred.predictions) sont des logits, qui doivent être convertis en indices.
+
+    - Conversion des logits en indices :
+        - La fonction np.argmax est utilisée pour sélectionner l'indice avec la probabilité la plus élevée pour chaque position dans la séquence.
+
+    - Gestion des labels -100 :
+        - Les valeurs -100 (utilisées pour ignorer les positions padées) dans pred.label_ids sont remplacées par l'identifiant du token de padding (pad_token_id).
+
+    - Décodage des prédictions et des labels :
+        - La méthode batch_decode du tokenizer reconvertit les indices en texte lisible.
+        - Les prédictions (pred_str) et les références (label_str) sont obtenues.
+    - Calcul du Word Error Rate (WER) :
+        - La fonction wer_metric.compute compare les transcriptions prédictes avec les transcriptions de référence pour calculer le taux d'erreurs :
+        
+.. figure:: /Documentation/Images/wer.png
+   :width: 70%
+   :align: center
+   :alt: Alternative text for the image
+   :name: Serveur d'images
+
+    - Retour des résultats :
+        - La fonction retourne un dictionnaire contenant la métrique WER : {"wer": wer}.
+
