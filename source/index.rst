@@ -3,19 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to darija voice transcription's and translation's documentation !
-===========================================================================
+Bienvenue dans la documentation sur la transcription et la traduction des voix en darija !
+===============================================================================================
 
-This project transcribes and translates Darija (Moroccan Arabic) audio into text with two main components:
-
-    - **Audio Transcription Model** : Utilizes the Wav2Vec2-large-XLSR-53 model, a state-of-the-art model for speech recognition, fine-tuned on a Darija Dataset, to transcribe audio into accurate text.
-    - **Translation Model** : Leverages a fine-tuned version of Helsinki-NLP/opus-mt-ar-en, trained on the None dataset, to translate the transcriptions from Darija into English.
-
-The repository also includes essential tools for collecting data from YouTube videos, including audio and their corresponding transcriptions based on video timestamps. It offers scripts for cleaning, transforming, and organizing the data to make it suitable for training and fine-tuning the the Wav2Vec2-large-XLSR-53 model.
-
-A simple app is also provided that enables users to upload audio files and receive both transcriptions and translations in a straightforward interface.
-
+Ce projet transcrit et traduit l'audio en darija (arabe marocain) en texte à l'aide de deux composants principaux :
  ..
+
+    - **Modèle de transcription audio :** Utilise le modèle Wav2Vec2-large-XLSR-53, un modèle de pointe pour la reconnaissance vocale, affiné sur un jeu de données en darija, pour transcrire l'audio en texte précis.
+    - **Modèle de traduction :** Exploite une version fine-tunée de Helsinki-NLP/opus-mt-ar-en, entraînée sur le jeu de données None, pour traduire les transcriptions du darija vers l'anglais.
+
+Le dépôt inclut également des outils essentiels pour collecter des données à partir de vidéos YouTube, notamment les pistes audio et leurs transcriptions correspondantes basées sur les horodatages des vidéos. Il propose des scripts pour nettoyer, transformer et organiser les données afin de les rendre adaptées à l'entraînement et au fine-tuning du modèle Wav2Vec2-large-XLSR-53.
+ ..
+
+Une application simple est également fournie, permettant aux utilisateurs de télécharger des fichiers audio et de recevoir à la fois les transcriptions et les traductions via une interface intuitive.
 
 .. toctree::
    :maxdepth: 2
