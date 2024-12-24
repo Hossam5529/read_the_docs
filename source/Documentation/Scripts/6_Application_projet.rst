@@ -56,7 +56,7 @@ et un modèle Seq2Seq pour la traduction en anglais.
 .. code-block:: python.. 
 
     with torch.no_grad():
-    logits = model(input_values).logits
+       logits = model(input_values).logits
     tokens = torch.argmax(logits, axis=-1)
     transcription = processor.batch_decode(tokens, skip_special_tokens=True)
     st.subheader("Transcription:")
@@ -70,7 +70,7 @@ et un modèle Seq2Seq pour la traduction en anglais.
 - Les données sont tokenisées, passées dans le modèle, et décodées.
 
  .. code-block:: python
-    
+
     tokenizer1 = AutoTokenizer.from_pretrained("centino00/darija-to-english")
     model1 = AutoModelForSeq2SeqLM.from_pretrained("centino00/darija-to-english")
     input_ids = tokenizer1(transcription[0], return_tensors="pt").input_ids 
