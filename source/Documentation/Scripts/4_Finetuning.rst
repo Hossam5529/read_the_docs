@@ -1,8 +1,8 @@
 IV-Fine-tuning
 =============
 
-4.1 Chargement et Préparation des Données :
----------------------------------------------
+4.1 Chargement et Préparation des Données de l'entrainement :
+---------------------------------------------------------------------------
 Cette étape prépare les données d'entraînement pour les rendre compatibles avec la bibliothèque Hugging Face Datasets, 
 essentielle pour travailler avec des modèles comme Wav2Vec2.
 
@@ -30,8 +30,8 @@ essentielle pour travailler avec des modèles comme Wav2Vec2.
 
    ['audio', 'text']
    {'audio': Audio(sampling_rate=None, mono=True, decode=True, id=None), 'text': Value(dtype='string', id=None)}
-   
-Detail :
+
+Détail :
 ~~~~~~~~~~~
 
 - 1.Chargement des données :
@@ -54,163 +54,328 @@ Detail :
     - features : Montre les types de données (Audio pour les fichiers audio, String pour les transcriptions).
 
 
-- 4.2 Exemples de reconnaissance d'entités nommées
-------------------------------------------------
-
-.. figure:: /Documentation/Images/NER.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: NER MODEL
-
-Certains des exemples courants d'un catégorisation d'entité sont: 
-
- - Apple     : est étiqueté ORG (Organisation) et surligné en rouge.
- - today     : est étiqueté DATE et surligné en rose.
- - Second    : est étiqueté QUANTITÉ et surligné en vert.
- - iPhone SE : est étiqueté COMM (Produit commercial) et surligné en bleu.
- - 4.7-inch  : est étiqueté QUANTITÉ et surligné en vert.
-
-Ambiguïté dans la reconnaissance d'entité nommée 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-La catégorie à laquelle appartient un terme est intuitivement assez claire pour les êtres humains. Cependant, ce n'est pas le cas des ordinateurs,ils rencontrent des problèmes de classification. Par example:
-Manchester City (Organisation) a remporté le trophée de la Premier League alors que dans la phrase suivante, l'organisation est utilisée différemment. Manchester City (Localisation) était une centrale électrique textile et industrielle.
-Votre modèle NER a besoin données d'entraînement mener avec précision extraction d'entité et classement. Si vous entraînez votre modèle sur l'anglais shakespearien, il va sans dire qu'il ne pourra pas déchiffrer Instagram.
-
-3.Différentes approches NER
-----------------------------
-
-L'objectif premier d'un Modèle NER consiste à étiqueter des entités dans des documents texte et à les catégoriser. Les trois approches suivantes sont généralement utilisées à cette fin. Cependant, vous pouvez également choisir de combiner une ou plusieurs méthodes.
-Les différentes approches pour créer des systèmes NER sont :
-
-Systèmes basés sur un dictionnaire 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Le système basé sur un dictionnaire est peut-être l'approche NER la plus simple et la plus fondamentale. Il utilisera un dictionnaire avec de nombreux mots, des synonymes et une collection de vocabulaire. Le système vérifiera si une entité particulière présente dans le texte est également disponible dans le vocabulaire. En utilisant un algorithme de mise en correspondance de chaînes, une vérification croisée des entités est effectuée.
-Un inconvénient de l'utilisation de cette approche est qu'il est nécessaire de mettre à jour constamment l'ensemble de données de vocabulaire pour le fonctionnement efficace du modèle NER.
-
-Systèmes basés sur des règles
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Dans cette approche, les informations sont extraites sur la base d'un ensemble de règles prédéfinies. Il existe deux principaux ensembles de règles utilisées,
-
-- Règles basées sur des modèles : Comme son nom l'indique, une règle basée sur un modèle suit un modèle morphologique ou une chaîne de mots utilisée dans le document.
-
-- Règles basées sur le contexte : Les règles contextuelles dépendent de la signification ou du contexte du mot dans le document.
-
-Systèmes basés sur l'apprentissage automatique
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Dans les systèmes basés sur l'apprentissage automatique, la modélisation statistique est utilisée pour détecter les entités. Une représentation basée sur les caractéristiques du document texte est utilisée dans cette approche. Vous pouvez surmonter plusieurs inconvénients des deux premières approches puisque le modèle peut reconnaître types d'entités malgré de légères variations dans leur orthographe.
-
-L'apprentissage en profondeur
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Les méthodes d'apprentissage en profondeur pour NER exploitent la puissance des réseaux de neurones tels que les RNN et les transformateurs pour comprendre les dépendances de texte à long terme. Le principal avantage de l’utilisation de ces méthodes est qu’elles sont bien adaptées aux tâches NER à grande échelle avec des données d’entraînement abondantes.
-De plus, ils peuvent apprendre des modèles et des fonctionnalités complexes à partir des données elles-mêmes, éliminant ainsi le besoin de formation manuelle. Mais il y a un piège. Ces méthodes nécessitent une grande puissance de calcul pour la formation et le déploiement.
-
-Méthodes hybrides
-~~~~~~~~~~~~~~~~~~
-
-Ces méthodes combinent des approches telles que l'apprentissage basé sur des règles, statistique et automatique pour extraire des entités nommées. L’objectif est de combiner les atouts de chaque méthode tout en minimisant leurs faiblesses. L’avantage de l’utilisation de méthodes hybrides est la flexibilité que vous obtenez en fusionnant plusieurs techniques grâce auxquelles vous pouvez extraire des entités de diverses sources de données.
-Cependant, il est possible que ces méthodes finissent par devenir beaucoup plus complexes que les méthodes à approche unique, car lorsque vous fusionnez plusieurs approches, le flux de travail peut devenir confus.
-
-NER Models Benchmarking
-=========================
-Nous avons fait une comparaison entre différents grands modèles de langage, nous avons cité différents modèles en utilisant Hugging Face et LM Studio. 
-
-.. note:: 
-   - il faut préparer les données pour chaque modèle pour le Finetuning, ça prend beaucoup de temps et chaque modèle se caractérise par un type des données d'entrée.
-   C'est pour cela nous avons utiliser la partie Spaces sur Hugging face.
-
-1.Magorshunov/layoutlm-invoices 
---------------------------------
-.. figure:: /Documentation/Images/magorshunov-layoutlm-invoice.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
-
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/shalinig/magorshunov-layoutlm-invoices>`_.
-2.Faisalraza/layoutlm-invoices 
---------------------------------
-.. figure:: /Documentation/Images/faisalraza-layoutlm-invoices.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
-
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/Anushk24/faisalraza-layoutlm-invoices>`_.
-
-3.Impira/layoutlm-invoices 
----------------------------
-.. figure:: /Documentation/Images/impira-layoutlm-invoices.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
-
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/udayzee05/impira-layoutlm-invoices>`_.
-
-4.Invoice header extraction with Donut 
----------------------------------------
-.. figure:: /Documentation/Images/donut.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
-
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/to-be/invoice_document_headers_extraction_with_donut>`_.
-
-5.Gemini application  
----------------------------------------
-.. figure:: /Documentation/Images/gemini.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
-
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/pc-17/invoice_extraction>`_.
-
-6.Generative AI / invoice reader
---------------------------------------
-.. figure:: /Documentation/Images/generativeAI.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
-
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/niladridutta/genai_based_invoice_reader>`_.
-
-7.Invoice Information Extraction using LayoutLMv3 model
+4.2 Chargement et Préparation des Données de Test
 ----------------------------------------------------------
-.. figure:: /Documentation/Images/layoutlmv3.png
-   :width: 80%
-   :align: center
-   :alt: Alternative text for the image
-   :name: LLM MODEL 
+Cette étape prépare les données de test de la même manière que les données d'entraînement, 
+afin qu'elles soient compatibles avec le modèle et le pipeline d'évaluation.
 
-.. note:: 
-   - Vous pouvez essayer ce modèle en cliquant `ici <https://huggingface.co/spaces/Theivaprakasham/layoutlmv3_invoice>`_.
+.. code-block:: python
+   import pandas as pd
+   from datasets import Dataset, Audio
 
+   # Chemin vers le fichier de données de test
+   file_path = r"C:\Users\ASUS\Desktop\DARIJA_SPEECH_RECOGNITION\Data Preprocessing\data_organization\test.txt" 
 
-Nous avons réalisé une analyse comparative approfondie de plusieurs modèles de langage de grande envergure (LLM) pour l'extraction de texte à partir de documents. Notre évaluation s'est principalement concentrée sur deux critères essentiels : le temps d'inférence requis par chaque modèle et le poids, ou la taille, de ces modèles. En examinant attentivement ces aspects, nous avons pu classer ces modèles en fonction de leur performance et de leur efficacité dans le contexte de l'extraction de texte. Cette classification nous a fourni des insights précieux sur les forces et les faiblesses de chaque modèle, nous permettant ainsi de prendre des décisions éclairées quant à leur utilisation dans divers scénarios d'application.
+   # Chargement des données dans un DataFrame Pandas
+   test_data = pd.read_csv(file_path, sep="|", header=0)
 
-Voici une video qui vous aidera à trouver et essayer les NER modèles
+   # Renommer les colonnes pour correspondre aux noms attendus par Hugging Face
+   test_data.rename(columns={'path': 'audio', 'transcript': 'text'}, inplace=True)
 
-.. raw:: html
+   # Conversion du DataFrame Pandas en un dataset Hugging Face
+   test_data_hf = Dataset.from_pandas(test_data)
 
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/M1cMBA6R95Y" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
+   # Convertir la colonne "audio" au format audio de Hugging Face
+   test_data_hf = test_data_hf.cast_column("audio", Audio())
 
+   # Afficher les premières lignes des données
+   print(test_data.head())
 
+Détail :
+~~~~~~~~~~~
 
+- 1.Chargement des données de test :
 
+   - Le fichier test.txt contient les chemins des fichiers audio de test et leurs transcriptions.
+   - Les colonnes sont séparées par le délimiteur |.
+
+- 2.Renommage des colonnes :
+
+   - Les colonnes path (chemin des fichiers audio) et transcript (transcriptions) sont renommées en audio et text.
+
+- 3.Conversion en Dataset Hugging Face :
+
+   - Les données sont converties en un dataset Hugging Face.
+   - La colonne audio est castée au type Audio() pour permettre une gestion efficace des fichiers audio.
+
+- 4.Affichage des données :
+
+    - La commande print(test_data.head()) permet de visualiser les premières lignes du DataFrame pour vérifier que les données ont été correctement chargées et formatées.
+
+4.3 Extraction du Vocabulaire Unique
+--------------------------------------
+
+Dans cette étape, vous extrayez les caractères uniques présents dans les transcriptions des données d'entraînement et de test. 
+Ce vocabulaire est utilisé pour définir l'ensemble des symboles que le modèle doit apprendre à reconnaître.
+
+.. code-block:: python
+
+   def extract_all_chars(batch):
+    all_text = " ".join(batch["text"])
+    vocab = list(set(all_text))
+    return {"vocab": [vocab], "all_text": [all_text]}
+
+   # Extraire le vocabulaire des données d'entraînement
+   vocab_train = train_data_hf.map(
+      extract_all_chars, 
+      batched=True, 
+      batch_size=-1, 
+      keep_in_memory=True, 
+      remove_columns=train_data_hf.column_names
+   )
+
+   # Extraire le vocabulaire des données de test
+   vocab_test = test_data_hf.map(
+      extract_all_chars, 
+      batched=True, 
+      batch_size=-1, 
+      keep_in_memory=True, 
+      remove_columns=test_data_hf.column_names
+   )
+
+   vocab_list = list(set(vocab_train["vocab"][0]) | set(vocab_test["vocab"][0]))
+   vocab_dict = {v: k for k, v in enumerate(vocab_list)}
+   vocab_dict
+
+.. code-block:: python
+
+   {'ث': 0,
+   'ء': 1,
+   'و': 2,
+   'ز': 3,
+   '7': 4,
+   'ئ': 5,
+   'ى': 6,
+   'ش': 7,
+   'ت': 8,
+   '8': 9,
+   '2': 10,
+   'ب': 11,
+   ' ': 12,
+   'ط': 13,
+   'س': 14,
+   'ا': 15,
+   'ظ': 16,
+   '0': 17,
+   'ح': 18,
+   'ع': 19,
+   '3': 20,
+   '9': 21,
+   'ذ': 22,
+   'د': 23,
+   'ج': 24,
+   ...
+   '5': 37,
+   'ف': 38,
+   'ل': 39,
+   'غ': 40,
+   'ك': 41}
+
+Détail :
+~~~~~~~~~~
+- 1.Fonction extract_all_chars :
+
+    - Prend un batch de données (batch) en entrée.
+   - Combine toutes les transcriptions (batch["text"]) en une seule chaîne.
+   - Identifie les caractères uniques à l'aide de set() et les convertit en liste.
+
+- 2.Application de la fonction :
+
+    - La fonction est appliquée à toutes les données d'entraînement et de test à l'aide de la méthode map() de Hugging Face Datasets.
+    - Paramètres importants :
+        - batched=True : La fonction est appliquée à des lots de données, et non à des exemples individuels.
+        - batch_size=-1 : Le lot contient toutes les données (calcul global).
+        - keep_in_memory=True : Garde les données en mémoire pour un traitement rapide.
+        - remove_columns=train_data_hf.column_names : Supprime les colonnes d'origine pour ne garder que les résultats de la fonction.
+
+4.4  Création du Vocabulaire et du Processeur pour Wav2Vec2 :
+-------------------------------------------------------------------
+Dans cette étape, le vocabulaire extrait est sauvegardé dans un fichier JSON. Ensuite, 
+un tokenizer et un processeur sont configurés pour préparer les données d'entrée au modèle Wav2Vec2.
+
+4.4.1 Sauvegarde du vocabulaire en JSON
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   import json
+   with open('vocab.json', 'w', encoding='utf-8') as vocab_file:
+      json.dump(vocab_dict, vocab_file, ensure_ascii=False, indent=4)
+
+- vocab_dict : Dictionnaire contenant le vocabulaire, construit à partir des caractères uniques extraits.
+- Paramètres importants :
+    - ensure_ascii=False : Permet de sauvegarder correctement les caractères non latins (par exemple, en arabe).
+    - indent=4 : Ajoute une indentation pour rendre le fichier JSON lisible.
+
+4.4.2 Création du tokenizer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from transformers import Wav2Vec2CTCTokenizer
+   tokenizer = Wav2Vec2CTCTokenizer(
+      "./vocab.json", 
+      unk_token="[UNK]", 
+      pad_token="[PAD]", 
+      word_delimiter_token="|"
+   )
+
+- **Wav2Vec2CTCTokenizer :**
+
+     - Convertit les caractères des transcriptions en séquences numériques.
+     - unk_token="[UNK]" : Spécifie le jeton utilisé pour les caractères inconnus.
+     - pad_token="[PAD]" : Définit le jeton pour le padding.
+     - word_delimiter_token="|" : Séparateur pour délimiter les mots.
+
+4.4.3 Création du feature extractor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from transformers import Wav2Vec2FeatureExtractor
+   feature_extractor = Wav2Vec2FeatureExtractor(
+      feature_size=1, 
+      sampling_rate=16000, 
+      padding_value=0.0, 
+      do_normalize=True, 
+      return_attention_mask=True
+   )
+
+- **Wav2Vec2FeatureExtractor :**
+
+      - Prépare les données audio brutes pour l'entrée dans le modèle.
+      - Paramètres importants :
+         - feature_size=1 : Spécifie la taille des caractéristiques (mono signal).
+         - sampling_rate=16000 : Fréquence d'échantillonnage des fichiers audio.
+         - do_normalize=True : Normalise les valeurs d'amplitude de l'audio.
+         - return_attention_mask=True : Retourne un masque d'attention pour ignorer les portions padées.
+
+4.4.4 . Création du processeur
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: python
+
+   from transformers import Wav2Vec2Processor
+   processor = Wav2Vec2Processor(
+      feature_extractor=feature_extractor, 
+      tokenizer=tokenizer
+)
+
+- **Wav2Vec2Processor :**
+
+    - Combine le tokenizer et le feature extractor dans une seule entité.
+    - Utilisé pour préparer les données audio et textuelles à l'entrée du modèle.
+
+4.5  Préparation des Données pour l'Entrée du Modèle :
+--------------------------------------------------------
+
+Dans cette étape, vous utilisez le processeur défini précédemment pour transformer les données brutes (audio et texte) en un 
+format directement utilisable par le modèle Wav2Vec2. Cela inclut la conversion des signaux audio en représentations
+numériques et des transcriptions en séquences d'indices.
+
+.. code-block:: python
+
+   def prepare_dataset(batch, processor=processor):
+      # Extraire l'audio et le texte
+      audio = batch["audio"]
+      text = batch["text"]
+
+      # Transformer les données audio en valeurs d'entrée pour le modèle
+      batch["input_values"] = processor(audio, sampling_rate=16000).input_values[0]
+
+      # Transformer le texte en étiquettes pour l'entraînement
+      with processor.as_target_processor():
+         batch["labels"] = processor(text).input_ids
+
+      return batch
+
+- Entrées :
+
+    - batch : Une ligne du dataset contenant l'audio (audio) et la transcription (text).
+    - processor : Le processeur défini précédemment.
+
+- Traitement audio :
+
+    - Le processeur extrait des valeurs d'entrée (input_values) à partir des signaux audio en utilisant une fréquence d'échantillonnage de 16 kHz.
+
+- Traitement texte :
+
+    - Les transcriptions sont converties en indices numériques (input_ids) à l'aide du tokenizer du processeur.
+
+4.6  Création d'un Data Collator pour le Fine-Tuning
+------------------------------------------------------
+
+Le data collator est une classe qui gère le processus de mise en lot (batching) des données tout en appliquant un 
+padding dynamique aux entrées et aux étiquettes. Cette étape est essentielle pour garantir que les données sont correctement
+ alignées lorsqu'elles sont passées au modèle.
+
+.. code-block:: python
+
+   import torch
+   from dataclasses import dataclass, field
+   from typing import Any, Dict, List, Optional, Union
+
+   @dataclass
+   class DataCollatorCTCWithPadding:
+    
+      processor: Wav2Vec2Processor
+      padding: Union[bool, str] = True
+      max_length: Optional[int] = None
+      max_length_labels: Optional[int] = None
+      pad_to_multiple_of: Optional[int] = None
+      pad_to_multiple_of_labels: Optional[int] = None
+
+      def __call__(self, features: List[Dict[str, Union[List[int], torch.Tensor]]]) -> Dict[str, torch.Tensor]:
+         # Séparer les entrées et les labels car leurs longueurs diffèrent
+         input_features = [{"input_values": feature["input_values"]} for feature in features]
+         label_features = [{"input_ids": feature["labels"]} for feature in features]
+
+         # Appliquer le padding aux entrées
+         batch = self.processor.pad(
+               input_features,
+               padding=self.padding,
+               max_length=self.max_length,
+               pad_to_multiple_of=self.pad_to_multiple_of,
+               return_tensors="pt",  # Retourner des tenseurs PyTorch
+         )
+
+         # Appliquer le padding aux étiquettes
+         with self.processor.as_target_processor():
+               labels_batch = self.processor.pad(
+                  label_features,
+                  padding=self.padding,
+                  max_length=self.max_length_labels,
+                  pad_to_multiple_of=self.pad_to_multiple_of_labels,
+                  return_tensors="pt",
+               )
+
+         # Remplacer le padding par -100 pour ignorer ces positions dans le calcul de la perte
+         labels = labels_batch["input_ids"].masked_fill(labels_batch.attention_mask.ne(1), -100)
+         batch["labels"] = labels
+
+         return batch
+
+- **Détails de la Classe DataCollatorCTCWithPadding**
+
+    - **Attributs :**
+        - processor : Le processeur défini précédemment, qui gère le padding pour les entrées et les étiquettes.
+        - padding : Stratégie de padding (par exemple, "longest" ou "max_length").
+        - max_length : Longueur maximale des entrées après padding.
+        - max_length_labels : Longueur maximale des étiquettes après padding.
+        - pad_to_multiple_of : Alignement des entrées sur une longueur multiple (facilite l'utilisation des Tensor Cores).
+        - pad_to_multiple_of_labels : Idem pour les étiquettes.
+
+    - **Méthode __call__ :**
+        - Séparation des données :
+            - Les entrées (input_values) et les étiquettes (labels) sont séparées car leurs longueurs peuvent différer.
+        - Padding des entrées :
+            - La méthode processor.pad() est utilisée pour ajuster les longueurs des séquences d'entrée.
+        - Padding des étiquettes :
+            - Les étiquettes sont également padées avec la méthode du processeur.
+        - Remplacement du padding :
+            - Les valeurs de padding sont remplacées par -100, une valeur spéciale utilisée pour ignorer ces positions dans le calcul de la perte (CTC Loss).
+
+    - **Retour :**
+        - Un dictionnaire contenant les données d'entrée (input_values) et les étiquettes (labels) après padding.
+
+4.7  Création d'un Data Collator pour le Fine-Tuning
+------------------------------------------------------
