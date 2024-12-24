@@ -54,6 +54,7 @@ et un modèle Seq2Seq pour la traduction en anglais.
 - Les prédictions de texte sont générées en identifiant les indices les plus probables et en décodant les tokens.
 
 .. code-block:: python.. 
+
     with torch.no_grad():
     logits = model(input_values).logits
     tokens = torch.argmax(logits, axis=-1)
@@ -69,6 +70,7 @@ et un modèle Seq2Seq pour la traduction en anglais.
 - Les données sont tokenisées, passées dans le modèle, et décodées.
 
  .. code-block:: python
+    
     tokenizer1 = AutoTokenizer.from_pretrained("centino00/darija-to-english")
     model1 = AutoModelForSeq2SeqLM.from_pretrained("centino00/darija-to-english")
     input_ids = tokenizer1(transcription[0], return_tensors="pt").input_ids 
