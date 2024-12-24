@@ -6,7 +6,7 @@
 Bienvenue dans la documentation sur la transcription et la traduction des voix en darija !
 ===============================================================================================
 
-Ce projet transcrit et traduit l'audio en darija (arabe marocain) en texte à l'aide de deux composants principaux :cc
+Ce projet transcrit et traduit l'audio en darija (arabe marocain) en texte à l'aide de deux composants principaux :
 
     - **Modèle de transcription audio :** Utilise le modèle Wav2Vec2-large-XLSR-53, un modèle de pointe pour la reconnaissance vocale, affiné sur un jeu de données en darija, pour transcrire l'audio en texte précis.
     - **Modèle de traduction :** Exploite une version fine-tunée de Helsinki-NLP/opus-mt-ar-en, entraînée sur le jeu de données None, pour traduire les transcriptions du darija vers l'anglais.
