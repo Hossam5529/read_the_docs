@@ -426,8 +426,8 @@ une mesure standard pour évaluer les systèmes de reconnaissance vocale.
    :width: 70%
    :align: center
    :alt: Alternative text for the image
-   :name: Serveur d'images
+   :name: Serveur d'images*
 
-    - Retour des résultats :
-        - La fonction retourne un dictionnaire contenant la métrique WER : {"wer": wer}.
+- Retour des résultats :
+   - La fonction retourne un dictionnaire contenant la métrique WER : {"wer": wer}.
 
