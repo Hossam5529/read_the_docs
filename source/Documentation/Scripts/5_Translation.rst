@@ -57,7 +57,7 @@ Pour le texte darija شنو هي الحاله ديالك؟, le modèle devrait f
 Points Importants :
 ----------------------
 
-**1-Pré-requis :
+**1-Pré-requis :**
 
     - Le modèle doit être téléchargé depuis Hugging Face. Assurez-vous d'avoir une connexion Internet active lors de l'exécution.
     - Installez transformers si ce n'est pas encore fait :
@@ -65,11 +65,11 @@ Points Importants :
 
         pip install transformers
 
-**2-Adaptabilité :
+**2-Adaptabilité :**
 
     - Vous pouvez également utiliser un autre modèle Seq2Seq pour des tâches similaires, comme traduire d'autres langues ou dialectes.
 
-**3-Améliorations Potentielles :
+**3-Améliorations Potentielles :**
 
     - Ajouter une gestion des erreurs si le texte fourni dépasse la capacité du modèle ou si le modèle n'est pas trouvé.
 
